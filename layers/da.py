@@ -111,10 +111,11 @@ class dA(object):
         tilde_x = self.get_corrupted_input(self.x, corruption_level)
         y = self.get_hidden_values(tilde_x)
         z = self.get_reconstructed_input(y)
-        L = - T.sum(self.x * T.log(z) + (1 - self.x) * T.log(1 - z), axis=1)
+#        L = - T.sum(self.x * T.log(z) + (1 - self.x) * T.log(1 - z), axis=1)
+        L = - T.mean(self.x * T.log(z) + (1 - self.x) * T.log(1 - z), axis=1)
         if self.reconstruct_activation is T.tanh:
-            L = T.sqr(self.x - z).sum(axis=1)
-
+            #L = T.sqr(self.x - z).sum(axis=1)
+            L = T.sqr(self.x - z).neam(axis=1)
         if self.sparsity_weight is not None:
             sparsity_level = T.extra_ops.repeat(self.sparsity, self.n_hidden)
             avg_act = y.mean(axis=0)
